@@ -1,9 +1,7 @@
 import React from 'react'
-import styles from './Burger.module.css'
 import Ingredients from './Ingredients/Ingredients'
 
-import classes from './Burger.module.css';
-import { array } from 'prop-types';
+import styles from './Burger.module.css'
 
 const Burger = (props: any): any => { //["burger":2, "cheese":1]
   const transformedIngredients = Object.keys(props.ingredients) //["burger", "cheese"] //array of keys
@@ -17,9 +15,9 @@ const Burger = (props: any): any => { //["burger":2, "cheese":1]
     }, []); //initial value of []
   
   return (
-    <div className={classes.Burger}>
+    <div className={styles.Burger}>
       <Ingredients type="bread-top"/>
-      {transformedIngredients.length ? transformedIngredients : <div>Please start adding ingredients!</div>}
+        {transformedIngredients.length ? transformedIngredients : <div>Please start adding ingredients!</div>}
       <Ingredients type="bread-bottom"/>
     </div>
   );
