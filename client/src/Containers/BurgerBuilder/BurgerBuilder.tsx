@@ -26,7 +26,19 @@ class BurgerBuilder extends Component<any,any>{
       cheese: 0,
       meat: 0,
     },
-    totalPrice: 4
+    totalPrice: 4,
+    purchaseable: false,
+  }
+
+  public updatePurchaseState(updatedIngredients: any): void {
+    const ingredients = {
+      ...updatedIngredients
+    }
+    const sum = Object.keys(ingredients)
+      .map((igKey: string) => (ingredients as any)[igKey])
+      .reduce((prev: number, curr: number): number => prev + curr)
+    console.log(sum);
+    this.setState({purchaseable: sum > 0})
   }
 
   public addIngredientHandler = (type: any): any => {
@@ -45,6 +57,7 @@ class BurgerBuilder extends Component<any,any>{
       ingredients: updatedIngredients,
       totalPrice: newPrice,
     })
+    this.updatePurchaseState(updatedIngredients)
   }
 
   public removeIngredientHandler = (type: any): any => {
@@ -66,22 +79,27 @@ class BurgerBuilder extends Component<any,any>{
       ingredients: updatedIngredients,
       totalPrice: newPrice,
     })
+    this.updatePurchaseState(updatedIngredients)
   }
 
 
   render() {
-    const disableInfo = { ...this.state.ingredients }
+    const { ingredients, totalPrice, purchaseable } = this.state;
+
+    const disableInfo = { ...ingredients }
     for (let key in disableInfo) {
       (disableInfo as any)[key] = (disableInfo as any)[key] <= 0 //*replaces array values with true or false
     }
 
     return (
       <Fragment>
-        <Burger ingredients={this.state.ingredients}/>
+        <Burger ingredients={ingredients}/>
         <BuildControls
           ingredientAdded={this.addIngredientHandler}
           ingredientRemoved={this.removeIngredientHandler}
-          disabled={disableInfo} />
+          disabled={disableInfo}
+          purchaseable={purchaseable}
+          price={totalPrice}/>
       </Fragment>
     )
   }
