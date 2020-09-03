@@ -2,6 +2,8 @@ import React, { Component, Fragment } from 'react'
 // import Auxil from '../../Components/Hoc/Auxil'
 import Burger from '../../Components/Burger/Burger'
 import BuildControls from '../../Components/Burger/BuildControls/BuildControls'
+import Modal from '../../Components/UI/Modal/Modal'
+import OrderSummary from '../../Components/Burger/OrderSummary/OrderSummary'
 
 interface IngredientsObj {
   salad: "string"|"number",
@@ -28,6 +30,7 @@ class BurgerBuilder extends Component<any,any>{
     },
     totalPrice: 4,
     purchaseable: false,
+    purchasing: false,
   }
 
   public updatePurchaseState(updatedIngredients: any): void {
@@ -82,9 +85,12 @@ class BurgerBuilder extends Component<any,any>{
     this.updatePurchaseState(updatedIngredients)
   }
 
+  public purchaseHandler = () => {
+    this.setState({purchasing:true})
+  }
 
   render() {
-    const { ingredients, totalPrice, purchaseable } = this.state;
+    const { ingredients, totalPrice, purchaseable, purchasing } = this.state;
 
     const disableInfo = { ...ingredients }
     for (let key in disableInfo) {
@@ -93,12 +99,16 @@ class BurgerBuilder extends Component<any,any>{
 
     return (
       <Fragment>
+        <Modal show={purchasing}>
+          <OrderSummary ingredients={ingredients}/>
+        </Modal>
         <Burger ingredients={ingredients}/>
         <BuildControls
           ingredientAdded={this.addIngredientHandler}
           ingredientRemoved={this.removeIngredientHandler}
           disabled={disableInfo}
           purchaseable={purchaseable}
+          ordered={this.purchaseHandler}
           price={totalPrice}/>
       </Fragment>
     )
