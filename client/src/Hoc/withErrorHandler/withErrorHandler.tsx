@@ -5,21 +5,36 @@ import Auxil from '../Auxil/Auxil';
 
 const WithErrorHandler = (WrappedComponent: any, axios: any): any => {
   return class extends Component<any,any> {
+    // constructor(props:any) {
+    //   super(props)
+    // }
 
-    public readonly state = {
-      error: null
+    state = {
+      error: null,
+      reqInter: null,
+      resInter: null,
     }
 
-    public componentDidMount() {
-      axios.interceptors.request.use((req: Request): Request => {
-        this.setState({ error: null })
-        return req;
+    public componentWillMount() {
+      this.setState({
+        reqInter: axios.interceptors.request.use((req: Request): Request => {
+          this.setState({ error: null })
+          return req;
+        })
       })
-      axios.interceptors.response.use((res: Response): Response => {
-        return res;
-      }, (err: Error): void => {
-          this.setState({ error: err }); 
+      this.setState({
+        resInter: axios.interceptors.response.use((res: Response): Response => {
+          return res;
+        }, (err: Error): void => {
+          this.setState({ error: err });
+        })
       })
+    }
+
+    public componentWillUnmount() {
+      console.log('Will unmount', this.state.reqInter, this.state.resInter)
+      axios.interceptors.request.eject(this.state.reqInter)
+      axios.interceptors.response.eject(this.state.resInter)
     }
 
     public errorConfirmedHandler = () => {

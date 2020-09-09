@@ -9,7 +9,7 @@ class Main extends Component<any, any>{
     return (
       <div>
         <Layout>
-          <BurgerBuilder/> 
+          <BurgerBuilder />
         </Layout>
       </div>
     )

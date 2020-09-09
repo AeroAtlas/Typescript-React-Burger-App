@@ -15,6 +15,7 @@ interface IngredientsObj {
   meat: "string"|"number",
 }
 
+
 const INGREDIENT_PRICES = {
   salad: 0.5,
   cheese: 0.4,
@@ -25,16 +26,22 @@ const INGREDIENT_PRICES = {
 class BurgerBuilder extends Component<any,any>{
   
   public readonly state = {
-    ingredients: {
-      salad: 0,
-      bacon: 0,
-      cheese: 0,
-      meat: 0,
-    },
+    ingredients: null,
     totalPrice: 4,
     purchaseable: false,
     purchasing: false,
     loading: false,
+    error: false
+  }
+
+  public componentDidMount() {
+    axios.get('https://burger-app-c0e9b.firebaseio.com/ingredients.json')
+      .then((res: any): any => {
+        console.log(res)
+        this.setState({ ingredients: res.data });
+      }).catch((err: any): any => {
+        this.setState({ error: true });
+      });
   }
 
   public updatePurchaseState(updatedIngredients: any): void {
@@ -48,44 +55,48 @@ class BurgerBuilder extends Component<any,any>{
   }
 
   public addIngredientHandler = (type: any): any => {
-    //? Turn type into a keyof ingredientsObj 
-    const key: (keyof IngredientsObj) = type;
-    const oldCount: any = (this.state.ingredients as any)[key];
+    if (this.state.ingredients) {
+      //* Turn type into a keyof ingredientsObj 
+      const key: (keyof IngredientsObj) = type;
+      const oldCount: any = (this.state.ingredients as any)[key];
 
-    //? Create new ingredients list with updated count
-    const updatedCount = oldCount + 1;
-    const updatedIngredients = { ...this.state.ingredients };
-    updatedIngredients[key] = updatedCount;
+      //* Create new ingredients list with updated count
+      const updatedCount = oldCount + 1;
+      const updatedIngredients = { ...(this.state.ingredients as any)  };
+      updatedIngredients[key] = updatedCount;
 
-    //? Create new price with (old price) + (price from this ingredient)
-    const newPrice = this.state.totalPrice + INGREDIENT_PRICES[key];
-    this.setState({
-      ingredients: updatedIngredients,
-      totalPrice: newPrice,
-    })
-    this.updatePurchaseState(updatedIngredients)
+      //* Create new price with (old price) + (price from this ingredient)
+      const newPrice = this.state.totalPrice + INGREDIENT_PRICES[key];
+      this.setState({
+        ingredients: updatedIngredients,
+        totalPrice: newPrice,
+      })
+      this.updatePurchaseState(updatedIngredients)
+    }
   }
 
   public removeIngredientHandler = (type: any): any => {
-    //? Turn type into a keyof ingredientsObj 
-    const key: (keyof IngredientsObj) = type;
-    const oldCount: any = (this.state.ingredients as any)[key];
+    if (this.state.ingredients) {
+      //* Turn type into a keyof ingredientsObj 
+      const key: (keyof IngredientsObj) = type;
+      const oldCount: any = (this.state.ingredients as any)[key];
 
-    //? Check for empty arrays and return if true
-    if (oldCount <= 0) { return; };
+      //* Check for empty arrays and return if true
+      if (oldCount <= 0) { return; };
 
-    //? Create new ingredients list with updated count
-    const updatedCount = oldCount - 1;
-    const updatedIngredients = { ...this.state.ingredients };
-    updatedIngredients[key] = updatedCount;
+      //* Create new ingredients list with updated count
+      const updatedCount = oldCount - 1;
+      const updatedIngredients = { ...(this.state.ingredients as any) };
+      updatedIngredients[key] = updatedCount;
 
-    //? Create new price with (old price) - (price from this ingredient)
-    const newPrice = this.state.totalPrice - INGREDIENT_PRICES[key];
-    this.setState({
-      ingredients: updatedIngredients,
-      totalPrice: newPrice,
-    })
-    this.updatePurchaseState(updatedIngredients)
+      //* Create new price with (old price) - (price from this ingredient)
+      const newPrice = this.state.totalPrice - INGREDIENT_PRICES[key];
+      this.setState({
+        ingredients: updatedIngredients,
+        totalPrice: newPrice,
+      })
+      this.updatePurchaseState(updatedIngredients)
+    }
   }
 
   public purchaseHandler = () => {
@@ -118,9 +129,9 @@ class BurgerBuilder extends Component<any,any>{
   }
 
   render() {
-    const { ingredients, totalPrice, purchaseable, purchasing } = this.state;
+    const { ingredients, totalPrice, purchaseable, purchasing, loading } = this.state;
 
-    const disableInfo = { ...ingredients }
+    const disableInfo = { ...(ingredients as any) }
     for (let key in disableInfo) {
       (disableInfo as any)[key] = (disableInfo as any)[key] <= 0 //*replaces array values with true or false
     }
@@ -128,7 +139,7 @@ class BurgerBuilder extends Component<any,any>{
     return (
       <Fragment>
         <Modal show={purchasing} modalClosed={this.purchaseCancelHandler}>
-          {(this.state.loading)
+          {(loading || (!ingredients))
             ? <Spinner />
             : <OrderSummary
               ingredients={ingredients}
@@ -137,7 +148,9 @@ class BurgerBuilder extends Component<any,any>{
               purchaseContinued={this.purchaseContinueHandler}
               />}
         </Modal>
-        <Burger ingredients={ingredients}/>
+        {(!ingredients)
+          ? <p style={{ textAlign: 'center', fontSize: '50px'}}>Ingredients can't be loaded</p>
+          : <Burger ingredients={ingredients}/>}
         <BuildControls
           ingredientAdded={this.addIngredientHandler}
           ingredientRemoved={this.removeIngredientHandler}
