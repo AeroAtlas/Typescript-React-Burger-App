@@ -7,13 +7,9 @@ import styles from './Modal.module.css'
 
 class Modal extends Component<any,any> {
 
-  public shouldComponentUpdate(nextProps: any, nextState: any): any {
-      return (nextProps.show !== this.props.show) 
+  public shouldComponentUpdate(nextProps: any, _nextState: any): any {
+      return (nextProps.show !== this.props.show || nextProps.childre !== this.props.children)
   }
-
-  // public componentWillUpdate() {
-  //   console.log('[Modal] will update')
-  // }
 
   render() {
     return (
