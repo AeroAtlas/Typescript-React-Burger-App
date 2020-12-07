@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 // import Auxil from '../../Components/Hoc/Auxil'
 import axios from '../../axios-order';
-import Burger from '../../Components/Burger/Burger'
+import Burger from '../../Components/Burger'
 import BuildControls from '../../Components/Burger/BuildControls/BuildControls'
 import Modal from '../../Components/UI/Modal/Modal'
 import OrderSummary from '../../Components/Burger/OrderSummary/OrderSummary'

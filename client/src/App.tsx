@@ -1,21 +1,47 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import React, { Component } from 'react';
+import {Route, Switch} from 'react-router-dom';
 
-import Main from './pages/Main';
-import NoMatch from './pages/NoMatch';
+import Layout from './Hoc/Layout/Layout'
+import BurgerBuilder from './Containers/BurgerBuilder/BurgerBuilder'
+import Checkout from "./Containers/Checkout"
+// import styles from '../css/Main.module.css';
 
-function App(): any {
-  return (
-    <Router>
+class App extends Component<any, any>{
+  render() {
+    return (
       <div>
-        <Switch>
-          <Route exact path={["/"]} component={Main} />
-          <Route component={NoMatch} />
-        </Switch>
+        <Layout>
+          <Switch>
+            <Route path="/checkout" component={Checkout} />
+            <Route path="/" exact component={BurgerBuilder} />
+          </Switch>
+        </Layout>
       </div>
-    </Router>
-  )
+    )
+  }
 }
 
-export default App;
+export default App
+
+// import React from 'react';
+// import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+
+// import Main from './pages/Main';
+// import NoMatch from './pages/NoMatch';
+
+
+// function App(): any {
+//   return (
+//     <Router>
+//       <div>
+//         <Switch>
+//           <Route exact path={["/"]} component={Main} />
+//           <Route component={NoMatch} />
+//         </Switch>
+//       </div>
+//     </Router>
+//   )
+// }
+
+// export default App;
 
