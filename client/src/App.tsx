@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import {Route, Switch} from 'react-router-dom';
 
-import Layout from './Hoc/Layout'
-import BurgerBuilder from './Containers/BurgerBuilder'
-import Checkout from "./Containers/Checkout"
+import Layout from './Hoc/Layout';
+import BurgerBuilder from './Containers/BurgerBuilder';
+import Checkout from "./Containers/Checkout";
+import Orders from "./Containers/Orders";
 // import styles from '../css/Main.module.css';
 
 class App extends Component<any, any>{
@@ -13,6 +14,7 @@ class App extends Component<any, any>{
         <Layout>
           <Switch>
             <Route path="/checkout" component={Checkout} />
+            <Route path="/orders" component={Orders} />
             <Route path="/" exact component={BurgerBuilder} />
           </Switch>
         </Layout>
