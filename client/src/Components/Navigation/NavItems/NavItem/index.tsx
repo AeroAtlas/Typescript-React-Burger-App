@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './NavItem.module.css'
+import styles from './style.module.css'
 
 const NavItem = (props: any): any => (
   <li className={styles.NavItem}>

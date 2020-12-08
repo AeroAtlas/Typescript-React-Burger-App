@@ -1,8 +1,8 @@
 import React from 'react';
-import Logo from '../../Logo/Logo'
-import NavItems from '../NavItems/NavItems'
-import DrawerToggle from '../SideDrawer/DrawerToggle/DrawerToggle'
-import styles from './Toolbar.module.css'
+import Logo from '../../Logo';
+import NavItems from '../NavItems';
+import DrawerToggle from '../SideDrawer/DrawerToggle';
+import styles from './style.module.css';
 
 
 const Toolbar = (props: any): any => (

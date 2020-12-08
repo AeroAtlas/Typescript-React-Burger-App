@@ -1,6 +1,6 @@
-import React from 'react'
-import NavItem from './NavItem/NavItem'
-import styles from './NavItems.module.css'
+import React from 'react';
+import NavItem from './NavItem';
+import styles from './style.module.css';
 
 const NavItems = () => (
   <ul className={styles.NavItems}>

@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import Auxil from '../../../Hoc/Auxil/Auxil'
-import Backdrop from '../Backdrop/Backdrop'
+import Auxil from '../../../Hoc/Auxil'
+import Backdrop from '../Backdrop'
 
-import styles from './Modal.module.css'
+import styles from './style.module.css'
 
 
 class Modal extends Component<any,any> {

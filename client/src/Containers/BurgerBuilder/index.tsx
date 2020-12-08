@@ -2,11 +2,11 @@ import React, { Component, Fragment } from 'react'
 // import Auxil from '../../Components/Hoc/Auxil'
 import axios from '../../axios-order';
 import Burger from '../../Components/Burger'
-import BuildControls from '../../Components/Burger/BuildControls/BuildControls'
-import Modal from '../../Components/UI/Modal/Modal'
-import OrderSummary from '../../Components/Burger/OrderSummary/OrderSummary'
-import Spinner from '../../Components/UI/Spinner/Spinner'
-import WithErrorHandler from '../../Hoc/withErrorHandler/withErrorHandler'
+import BuildControls from '../../Components/Burger/BuildControls'
+import Modal from '../../Components/UI/Modal'
+import OrderSummary from '../../Components/Burger/OrderSummary'
+import Spinner from '../../Components/UI/Spinner'
+import WithErrorHandler from '../../Hoc/withErrorHandler'
 
 interface IngredientsObj {
   salad: "string"|"number",
@@ -126,6 +126,7 @@ class BurgerBuilder extends Component<any,any>{
     axios.post('/orders.json', order)
       .then((_res: any): any => { this.setState({ loading: false, purchasing: false }) })
       .catch((_err: any): any => { this.setState({ loading: false, purchasing: false }) });
+    // this.props.history.push("/checkout")
   }
 
   render() {

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {Route, Switch} from 'react-router-dom';
 
-import Layout from './Hoc/Layout/Layout'
-import BurgerBuilder from './Containers/BurgerBuilder/BurgerBuilder'
+import Layout from './Hoc/Layout'
+import BurgerBuilder from './Containers/BurgerBuilder'
 import Checkout from "./Containers/Checkout"
 // import styles from '../css/Main.module.css';
 

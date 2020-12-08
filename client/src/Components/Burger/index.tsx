@@ -1,5 +1,5 @@
-import React from 'react'
-import Ingredients from './Ingredients/Ingredients'
+import React from 'react';
+import Ingredients from './Ingredients';
 
 import styles from './style.module.css'
 

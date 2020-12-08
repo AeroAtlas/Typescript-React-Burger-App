@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './Ingredients.module.css';
+import styles from './style.module.css';
 
 const Ingredients = (props: any): any => {
   let ingredient = null; //will become array likely
