@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "../../../axios-order";
 import Button from "../../../Components/UI/Button";
 import Spinner from "../../../Components/UI/Spinner";
+import Input from "../../../Components/UI/Input";
 import styles from "./style.module.css";
 
 class ContactData extends Component<any,any> {
@@ -47,11 +48,11 @@ class ContactData extends Component<any,any> {
         {(this.state.loading)
         ? <Spinner/>
         : <form>
-          <input className={styles.Input} type="text" name="name" placeholder="Your name"/>
-          <input className={styles.Input} type="text" name="email" placeholder="Your email"/>
-          <input className={styles.Input} type="text" name="street" placeholder="Your street"/>
-          <input className={styles.Input} type="text" name="postal" placeholder="Postal code"/>
-          <Button btnType="Success" clicked={this.orderHandler}>ORDER</Button>
+            <Input inputtype="input" type="text" name="name" placeholder="Your name"/>
+            <Input inputtype="input" type="text" name="email" placeholder="Your email"/>
+            <Input inputtype="input" type="text" name="street" placeholder="Your street"/>
+            <Input inputtype="input" type="text" name="postal" placeholder="Postal code"/>
+            <Button btnType="Success" clicked={this.orderHandler}>ORDER</Button>
         </form>}
       </div>
     );
