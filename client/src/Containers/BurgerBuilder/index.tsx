@@ -18,19 +18,13 @@ interface IngredientsObj {
 }
 
 
-const INGREDIENT_PRICES = {
-  salad: 0.5,
-  cheese: 0.4,
-  meat: 1.3,
-  bacon: 0.7,
-}
 
 class BurgerBuilder extends Component<any,any>{
   
   public readonly state = {
-    ingredients: null,
-    totalPrice: 4,
-    purchaseable: false,
+    // ingredients: null,
+    // totalPrice: 4,
+    // purchaseable: false,
     purchasing: false,
     loading: false,
     error: false
@@ -46,60 +40,60 @@ class BurgerBuilder extends Component<any,any>{
     //   });
   }
 
-  public updatePurchaseState(updatedIngredients: any): void {
-    const ingredients = {
-      ...updatedIngredients
-    }
-    const sum = Object.keys(ingredients)
-      .map((igKey: string) => (ingredients as any)[igKey])
-      .reduce((prev: number, curr: number): number => prev + curr)
-    this.setState({purchaseable: sum > 0})
-  }
+  // public updatePurchaseState(/*updatedIngredients: any*/): void {
+  //   const ingredients = {
+  //     ...this.props.ings
+  //   }
+  //   const sum = Object.keys(ingredients)
+  //     .map((igKey: string) => (ingredients as any)[igKey])
+  //     .reduce((acc: number, curr: number): number => acc + curr)
+  //   this.setState({purchaseable: sum > 0})
+  // }
 
-  public addIngredientHandler = (type: any): any => {
-    if (this.state.ingredients) {
-      //* Turn type into a keyof ingredientsObj 
-      const key: (keyof IngredientsObj) = type;
-      const oldCount: any = (this.state.ingredients as any)[key];
+  // public addIngredientHandler = (type: any): any => {
+  //   if (this.state.ingredients) {
+  //     //* Turn type into a keyof ingredientsObj 
+  //     const key: (keyof IngredientsObj) = type;
+  //     const oldCount: any = (this.state.ingredients as any)[key];
 
-      //* Create new ingredients list with updated count
-      const updatedCount = oldCount + 1;
-      const updatedIngredients = { ...(this.state.ingredients as any)  };
-      updatedIngredients[key] = updatedCount;
+  //     //* Create new ingredients list with updated count
+  //     const updatedCount = oldCount + 1;
+  //     const updatedIngredients = { ...(this.state.ingredients as any)  };
+  //     updatedIngredients[key] = updatedCount;
 
-      //* Create new price with (old price) + (price from this ingredient)
-      const newPrice = this.state.totalPrice + INGREDIENT_PRICES[key];
-      this.setState({
-        ingredients: updatedIngredients,
-        totalPrice: newPrice,
-      })
-      this.updatePurchaseState(updatedIngredients)
-    }
-  }
+  //     //* Create new price with (old price) + (price from this ingredient)
+  //     const newPrice = this.state.totalPrice + INGREDIENT_PRICES[key];
+  //     this.setState({
+  //       ingredients: updatedIngredients,
+  //       totalPrice: newPrice,
+  //     })
+  //     this.updatePurchaseState(updatedIngredients)
+  //   }
+  // }
 
-  public removeIngredientHandler = (type: any): any => {
-    if (this.state.ingredients) {
-      //* Turn type into a keyof ingredientsObj 
-      const key: (keyof IngredientsObj) = type;
-      const oldCount: any = (this.state.ingredients as any)[key];
+  // public removeIngredientHandler = (type: any): any => {
+  //   if (this.state.ingredients) {
+  //     //* Turn type into a keyof ingredientsObj 
+  //     const key: (keyof IngredientsObj) = type;
+  //     const oldCount: any = (this.state.ingredients as any)[key];
 
-      //* Check for empty arrays and return if true
-      if (oldCount <= 0) { return; };
+  //     //* Check for empty arrays and return if true
+  //     if (oldCount <= 0) { return; };
 
-      //* Create new ingredients list with updated count
-      const updatedCount = oldCount - 1;
-      const updatedIngredients = { ...(this.state.ingredients as any) };
-      updatedIngredients[key] = updatedCount;
+  //     //* Create new ingredients list with updated count
+  //     const updatedCount = oldCount - 1;
+  //     const updatedIngredients = { ...(this.state.ingredients as any) };
+  //     updatedIngredients[key] = updatedCount;
 
-      //* Create new price with (old price) - (price from this ingredient)
-      const newPrice = this.state.totalPrice - INGREDIENT_PRICES[key];
-      this.setState({
-        ingredients: updatedIngredients,
-        totalPrice: newPrice,
-      })
-      this.updatePurchaseState(updatedIngredients)
-    }
-  }
+  //     //* Create new price with (old price) - (price from this ingredient)
+  //     const newPrice = this.state.totalPrice - INGREDIENT_PRICES[key];
+  //     this.setState({
+  //       ingredients: updatedIngredients,
+  //       totalPrice: newPrice,
+  //     })
+  //     this.updatePurchaseState(updatedIngredients)
+  //   }
+  // }
 
   public purchaseHandler = () => {
     this.setState({purchasing:true})
@@ -110,21 +104,23 @@ class BurgerBuilder extends Component<any,any>{
   }
 
   public purchaseContinueHandler = () => {
-    const queryParams = [];
-    for(let i in (this.state.ingredients as any)){
-      queryParams.push(encodeURIComponent(i) + "=" + encodeURIComponent(this.state.ingredients![i]));
-    }
-    queryParams.push("price=" + this.state.totalPrice);
-    const queryString = queryParams.join("&")
-    this.props.history.push({
-      pathname: "/checkout",
-      search: "?" + queryString
-    })
+    // const {ings, price} = this.props
+    // const queryParams = [];
+    // for(let i in (ings as any)){
+    //   queryParams.push(encodeURIComponent(i) + "=" + encodeURIComponent(ings![i]));
+    // }
+    // queryParams.push("price=" + price);
+    // const queryString = queryParams.join("&")
+    // this.props.history.push({
+    //   pathname: "/checkout",
+    //   search: "?" + queryString
+    // })
+    this.props.history.push("/checkout")
   }
 
   render() {
-    const { totalPrice, purchaseable, purchasing, loading } = this.state;
-    const { ings, onIngAdded, onIngRemoved } = this.props;
+    const { purchasing, loading } = this.state;
+    const { ings, price, purchase, onIngAdded, onIngRemoved } = this.props;
 
     const disableInfo = { ...(ings as any) }
     for (let key in disableInfo) {
@@ -138,7 +134,7 @@ class BurgerBuilder extends Component<any,any>{
             ? <Spinner />
             : <OrderSummary
               ingredients={ings}
-              price={totalPrice}
+              price={price}
               purchaseCancelled={this.purchaseCancelHandler}
               purchaseContinued={this.purchaseContinueHandler}
               />}
@@ -150,9 +146,9 @@ class BurgerBuilder extends Component<any,any>{
           ingredientAdded={onIngAdded}
           ingredientRemoved={onIngRemoved}
           disabled={disableInfo}
-          purchaseable={purchaseable}
+          purchaseable={purchase}
           ordered={this.purchaseHandler}
-          price={totalPrice}/>
+          price={price}/>
       </Fragment>
     )
   }
@@ -160,7 +156,9 @@ class BurgerBuilder extends Component<any,any>{
 
 const mapStateToProps = (state: any): any => {
   return {
-    ings: state.ingredients
+    ings: state.ingredients,
+    price: state.totalPrice,
+    purchase: state.purchaseable
   }
 }
 
