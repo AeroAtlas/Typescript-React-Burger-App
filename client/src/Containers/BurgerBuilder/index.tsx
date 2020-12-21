@@ -8,7 +8,7 @@ import Modal from '../../Components/UI/Modal';
 import OrderSummary from '../../Components/Burger/OrderSummary';
 import Spinner from '../../Components/UI/Spinner';
 import WithErrorHandler from '../../Hoc/withErrorHandler';
-import * as aTypes from "../../store/actions";
+import * as actions from "../../store/actions";
 
 interface IngredientsObj {
   salad: "string"|"number",
@@ -24,20 +24,15 @@ class BurgerBuilder extends Component<any,any>{
   public readonly state = {
     // ingredients: null,
     // totalPrice: 4,
-    // purchaseable: false,
+    purchaseable: false,
     purchasing: false,
     loading: false,
     error: false
   }
 
   public componentDidMount() {
-    // axios.get('https://burger-app-c0e9b.firebaseio.com/ingredients.json')
-    //   .then((res: any): any => {
-    //     console.log(res)
-    //     this.setState({ ingredients: res.data });
-    //   }).catch((err: any): any => {
-    //     this.setState({ error: true });
-    //   });
+    console.log(this.props);
+    this.props.onIngInit();
   }
 
   // public updatePurchaseState(/*updatedIngredients: any*/): void {
@@ -119,18 +114,19 @@ class BurgerBuilder extends Component<any,any>{
   }
 
   render() {
-    const { purchasing, loading } = this.state;
-    const { ings, price, purchase, onIngAdded, onIngRemoved } = this.props;
+    const { purchasing } = this.state;
+    const { ings, price, purchase, error, onIngAdded, onIngRemoved } = this.props;
 
     const disableInfo = { ...(ings as any) }
     for (let key in disableInfo) {
       (disableInfo as any)[key] = (disableInfo as any)[key] <= 0 //*replaces array values with true or false
     }
-
+    console.log(ings)
     return (
       <Fragment>
         <Modal show={purchasing} modalClosed={this.purchaseCancelHandler}>
-          {(loading || (!ings))
+          {/*Removed loading*/}
+          {(!ings) 
             ? <Spinner />
             : <OrderSummary
               ingredients={ings}
@@ -139,8 +135,8 @@ class BurgerBuilder extends Component<any,any>{
               purchaseContinued={this.purchaseContinueHandler}
               />}
         </Modal>
-        {(!ings)
-          ? <p style={{ textAlign: 'center', fontSize: '50px'}}>Ingredients can't be loaded</p>
+        {(!ings || error)
+          ? <Spinner /> || <p style={{ textAlign: 'center', fontSize: '50px'}}>Ingredients can't be loaded</p>
           : <Burger ingredients={ings}/>}
         <BuildControls
           ingredientAdded={onIngAdded}
@@ -158,14 +154,16 @@ const mapStateToProps = (state: any): any => {
   return {
     ings: state.ingredients,
     price: state.totalPrice,
-    purchase: state.purchaseable
+    purchase: state.purchaseable,
+    error: state.error
   }
 }
 
 const mapDispatchToProps = (dispatch: any): any => {
   return {
-    onIngAdded: (ingName: any): any => dispatch({type: aTypes.ADD_INGREDIENT, payload: {ingName}}),
-    onIngRemoved: (ingName: any): any => dispatch({type: aTypes.REMOVE_INGREDIENT, payload: {ingName}})
+    onIngAdded: (ingName: any): any => dispatch(actions.addIngredient(ingName)),
+    onIngRemoved: (ingName: any): any => dispatch(actions.removeIngredient(ingName)),
+    onIngInit: () => dispatch(actions.initIngredients()) 
   }
 }
 

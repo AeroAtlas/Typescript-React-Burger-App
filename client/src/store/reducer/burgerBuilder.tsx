@@ -1,14 +1,10 @@
 // import Ingredients from "../Components/Burger/Ingredients";
-import * as aTypes from "./actions";
+import * as aTypes from "../actions/actionTypes";
 
 const initialState = {
-  ingredients: {
-    salad: 0,
-    bacon: 0,
-    cheese: 0,
-    meat: 0
-  },
+  ingredients: null,
   totalPrice: 4,
+  error: false,
   purchaseable: false
 }
 
@@ -20,6 +16,8 @@ const INGREDIENT_PRICES = {
 }
 
 const reducer = (state: any = initialState, action: any): any => {
+  console.log(action.ingredients)
+  // const stateIngredients = {salad: action.ingredients.salad, bacon: action.ingredients.bacon, cheese: action.ingredients.cheese, meat: action.ingredients.meat}
   let ingredients = {};
   switch(action.type){
     case aTypes.ADD_INGREDIENT:
@@ -47,6 +45,14 @@ const reducer = (state: any = initialState, action: any): any => {
         purchaseable: Object.keys(ingredients)
           .map((igKey: string) => (ingredients as any)[igKey])
           .reduce((acc: number, curr: number): number => acc + curr)
+      }
+    case aTypes.SET_INGREDIENTS:
+      return {
+        ...state, ingredients: action.payload.ingredients, error: false
+      }
+    case aTypes.FETCH_INGREDIENTS_FAILED:
+      return {
+        ...state, error: true
       }
     default: 
       return state
