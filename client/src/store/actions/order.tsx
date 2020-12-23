@@ -29,10 +29,16 @@ export const purchaseBurger = (orderData: Object) => {
     axios.post('/orders.json', orderData)
       .then((res: any): void => { 
         console.log(res)
-        dispatch(purchaseBurgerSuccess(res.data, orderData))
+        dispatch(purchaseBurgerSuccess(res.data.name, orderData))
       })
       .catch((err: Error): void => {
         dispatch(purchaseBurgerFail(err))
       });
+  }
+}
+
+export const purchaseInit = (): Object => {
+  return {
+    type: aTypes.PURCHASE_INIT
   }
 }

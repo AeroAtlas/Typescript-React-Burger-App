@@ -17,7 +17,7 @@ class ContactData extends Component<any,any> {
         type: type,
         placeholder: placeholder
       },
-      value: "",
+      value: "", //Removed fastest from this spot due to it filling all of the contact data with fastest
       validation,
       valid: false,
       touched: false
