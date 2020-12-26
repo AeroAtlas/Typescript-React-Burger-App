@@ -7,7 +7,6 @@ import Input from "../../../Components/UI/Input";
 import styles from "./style.module.css";
 import withErrorHandler from "../../../Hoc/withErrorHandler";
 import * as actions from "../../../store/actions";
-import { start } from "repl";
 
 class ContactData extends Component<any,any> {
   formData = (placeholder: String, type: String = "text", validation: Object = {required: true}): Object => {
@@ -66,13 +65,21 @@ class ContactData extends Component<any,any> {
   checkValidity = (value: any, rules: any = {}): any => {
     let isValid = true;
     if(rules.required){
-      isValid = value.trim() !== "" && isValid;
+      isValid = isValid && value.trim() !== "";
     }
     if(rules.minLength){
-      isValid = value.length >= rules.minLength && isValid;
+      isValid = isValid && value.length >= rules.minLength;
     }
     if(rules.maxLength){
-      isValid = value.length <= rules.maxLength && isValid;
+      isValid = isValid && value.length <= rules.maxLength;
+    }
+    if(rules.isEmail){
+      const pattern = /\S+@\S+\.\S+/
+      isValid = isValid && pattern.test(value)
+    }
+    if(rules.isNumeric){
+      const pattern = /^\d+$/;
+      isValid = isValid && pattern.test(value)
     }
     return isValid
   }
