@@ -1,5 +1,6 @@
 // import Ingredients from "../Components/Burger/Ingredients";
 import * as aTypes from "../actions/actionTypes";
+import { updateObject } from "../utility"; 
 
 const initialState = {
   ingredients: null,
@@ -15,47 +16,40 @@ const INGREDIENT_PRICES = {
   bacon: 0.7,
 }
 
+const changeIngredient = (state: any, action: any, modifier: any): Object => {
+  const updatedIngredient = { [action.payload.ingName]: state.ingredients[action.payload.ingName] + (1 * modifier) }
+  const ingredients = updateObject(state.ingredients, updatedIngredient)
+  const updatedState = {
+    ingredients,
+    totalPrice: state.totalPrice + (modifier * (INGREDIENT_PRICES as any)[action.payload.ingName]),
+    purchaseable: Object.keys(ingredients)
+      .map((igKey: string) => (ingredients as any)[igKey])
+      .reduce((acc: number, curr: number): number => acc + curr)
+  }
+  return updateObject(state, updatedState)
+}
+
+const setIngredient = (state: any, action: any): Object => {
+  const stateIngredients = {
+    salad: action.payload.ingredients.salad,
+    bacon: action.payload.ingredients.bacon,
+    cheese: action.payload.ingredients.cheese,
+    meat: action.payload.ingredients.meat
+  }
+  return updateObject(state, {
+    ingredients: stateIngredients,
+    error: false,
+    totalPrice: initialState.totalPrice
+  })
+}
+
 const reducer = (state: any = initialState, action: any): any => {
-  console.log(action.ingredients)
-  // const stateIngredients = {salad: action.ingredients.salad, bacon: action.ingredients.bacon, cheese: action.ingredients.cheese, meat: action.ingredients.meat}
-  let ingredients = {};
   switch(action.type){
-    case aTypes.ADD_INGREDIENT:
-      ingredients = {
-        ...state.ingredients, 
-        [action.payload.ingName]: state.ingredients[action.payload.ingName] + 1
-      }
-      return {
-        ...state, 
-        ingredients,
-        totalPrice: state.totalPrice + (INGREDIENT_PRICES as any)[action.payload.ingName],
-        purchaseable: Object.keys(ingredients)
-          .map((igKey: string) => (ingredients as any)[igKey])
-          .reduce((acc: number, curr: number): number => acc + curr)
-      }
-    case aTypes.REMOVE_INGREDIENT:
-      ingredients = {
-        ...state.ingredients, 
-        [action.payload.ingName]: state.ingredients[action.payload.ingName] - 1
-      }
-      return {
-        ...state, 
-        ingredients,
-        totalPrice: state.totalPrice - (INGREDIENT_PRICES as any)[action.payload.ingName],
-        purchaseable: Object.keys(ingredients)
-          .map((igKey: string) => (ingredients as any)[igKey])
-          .reduce((acc: number, curr: number): number => acc + curr)
-      }
-    case aTypes.SET_INGREDIENTS:
-      return {
-        ...state, ingredients: action.payload.ingredients, error: false, totalPrice: initialState.totalPrice
-      }
-    case aTypes.FETCH_INGREDIENTS_FAILED:
-      return {
-        ...state, error: true
-      }
-    default: 
-      return state
+    case aTypes.ADD_INGREDIENT: return changeIngredient(state,action,1)
+    case aTypes.REMOVE_INGREDIENT: return changeIngredient(state,action,-1)
+    case aTypes.SET_INGREDIENTS: return setIngredient(state,action)
+    case aTypes.FETCH_INGREDIENTS_FAILED: return updateObject(state, {error:true})
+    default: return state
   }
 } 
 
